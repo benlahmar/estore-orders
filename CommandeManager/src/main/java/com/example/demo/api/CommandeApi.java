@@ -11,14 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entities.Client;
 import com.example.demo.entities.Commande;
+import com.example.demo.entities.LigneCommande;
+import com.example.demo.entities.Produit;
 import com.example.demo.metier.IMetier;
+import com.example.demo.remoteApi.asyn.IServiceCatalogue;
+
+import reactor.core.publisher.Mono;
 
 @RestController
 public class CommandeApi {
 
 	@Autowired
 	IMetier service;
+	
+	@Autowired
+	IServiceCatalogue servicecatalogue;
 	
 	@PostMapping("/commandes")
 	public ResponseEntity<Commande> addcmd(@RequestBody Commande c)
@@ -42,5 +51,34 @@ public class CommandeApi {
 	public List<Commande> allcmd()
 	{
 		return service.allcmd();
+	}
+	
+	@PostMapping("/commandes/{id}/lignes")
+	public ResponseEntity<LigneCommande> addlgcmd(@RequestBody LigneCommande c, @PathVariable long id)
+	{
+		c=service.addLCommd(c, id);
+		return new ResponseEntity<LigneCommande>(c,HttpStatus.OK);
+	}
+	
+	@GetMapping("/catalogues/produits/{id}")
+	public Mono<Produit> getProduitAsyn(@PathVariable long id)
+	{
+		System.out.println("avant");
+		 Mono<Produit> p = servicecatalogue.findProduit(id);
+		 System.out.println(p.toString());
+		 System.out.println("apres");
+		 return p;
+	}
+	
+	
+	
+	@GetMapping("/customer/clients/{id}")
+	public Mono<Client> getClientAsyn(@PathVariable long id)
+	{
+		System.out.println("avant");
+		 Mono<Client> p = servicecatalogue.findClientById(id);
+		 System.out.println(p.toString());
+		 System.out.println("apres");
+		 return p;
 	}
 }

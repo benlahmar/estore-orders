@@ -29,7 +29,7 @@ public class Commande {
 	@Transient
 	Client client;
 	
-	State state;
+	State state=State.CREATED;
 
 	public long getIdclient() {
 		return idclient;

@@ -3,6 +3,8 @@ package com.example.demo.entities;
 import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +38,7 @@ public class LigneCommande {
 		this.idproduit = idproduit;
 	}
 
+	@JsonIgnore
 	@ManyToOne
 	Commande commande;
 	
